@@ -1,7 +1,7 @@
 {
-  "name": "router",
+  "name": "state",
   "version": "1.0.0",
-  "description": "Basic react app using routing within components",
+  "description": "Basic react app using useState within components",
   "main": "index.js",
   "scripts": {
     "start": "webpack server --config webpack.dev.config.js",

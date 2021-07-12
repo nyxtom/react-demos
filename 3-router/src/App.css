@@ -43,3 +43,13 @@ ul li {
 .container {
   padding: 1rem;
 }
+
+.topic ul li {
+  float: none;
+  list-style: initial;
+}
+
+.post {
+  background: #fff;
+  padding: 2rem;
+}

@@ -12,7 +12,7 @@ const Dashboard = () => (
   <div>Dashboard</div>
 )
 
-const Topic = () => {
+const Post = () => {
   const params = useParams()
   const match = useRouteMatch()
   const location = useLocation()
@@ -20,8 +20,35 @@ const Topic = () => {
   console.log({ params, match, path, location })
 
   return (
-    <div>
+    <article className="post">
+      <h3>Post Title for {params.postId}</h3>
+      <pre>Content for post</pre>
+    </article>
+  )
+}
+
+const Topic = () => {
+  const params = useParams()
+  const match = useRouteMatch()
+  const location = useLocation()
+  const { path, url } = match
+  console.log({ params, match, path, location })
+
+  let posts = Array(10).fill(0)
+    .map((_, i) => String.fromCharCode(65 + i))
+    .map(i => (
+      <li key={i}><Link to={`${url}/posts/uuid_${i}`}>Post {i}</Link></li>
+    ))
+
+  return (
+    <div className="topic">
       <h3>Topic: {params.topicId}</h3>
+      <ul>
+        {posts}
+      </ul>
+      <Switch>
+        <Route path={`${url}/posts/:postId`} component={Post} />
+      </Switch>
     </div>
   )
 }

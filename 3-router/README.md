@@ -22,6 +22,10 @@ npm i --save react-router-dom
 * To render a component based on a conditional switch, use `Switch`
 * To match on a conditional render `Switch` against a route use `Route`
 * To link to another route use `Link`
+* To gain access to route params use `useParams`
+* To gain access to route match (params, location, path) use `useRouteMatch`
+* To gain access to the full location use `useLocation`
+* To create a route with params format `<Route path="/topics/:topicId" component={Topic} />`
 
 ```javascript
 import React from 'react'
@@ -38,7 +42,7 @@ const Dashboard = () => (
   <div>Dashboard</div>
 )
 
-const Topic = () => {
+const Post = () => {
   const params = useParams()
   const match = useRouteMatch()
   const location = useLocation()
@@ -46,8 +50,35 @@ const Topic = () => {
   console.log({ params, match, path, location })
 
   return (
-    <div>
+    <article className="post">
+      <h3>Post Title for {params.postId}</h3>
+      <pre>Content for post</pre>
+    </article>
+  )
+}
+
+const Topic = () => {
+  const params = useParams()
+  const match = useRouteMatch()
+  const location = useLocation()
+  const { path, url } = match
+  console.log({ params, match, path, location })
+
+  let posts = Array(10).fill(0)
+    .map((_, i) => String.fromCharCode(65 + i))
+    .map(i => (
+      <li key={i}><Link to={`${url}/posts/uuid_${i}`}>Post {i}</Link></li>
+    ))
+
+  return (
+    <div className="topic">
       <h3>Topic: {params.topicId}</h3>
+      <ul>
+        {posts}
+      </ul>
+      <Switch>
+        <Route path={`${url}/posts/:postId`} component={Post} />
+      </Switch>
     </div>
   )
 }
@@ -124,6 +155,16 @@ ul li {
  */
 .container {
   padding: 1rem;
+}
+
+.topic ul li {
+  float: none;
+  list-style: initial;
+}
+
+.post {
+  background: #fff;
+  padding: 2rem;
 }
 ```
 

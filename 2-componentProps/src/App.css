@@ -24,3 +24,10 @@ h1 {
     z-index: 999;
     position: relative;
 }
+
+/**
+ * Container
+ */
+.container {
+  padding: 1rem;
+}

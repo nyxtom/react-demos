@@ -70,6 +70,94 @@ h1 {
     z-index: 999;
     position: relative;
 }
+
+/**
+ * Container
+ */
+.container {
+  padding: 1rem;
+}
+```
+
+### Add a custom class component
+
+Implement a custom class based component `src/components/Article.js`
+
+```javascript
+import React from 'react'
+
+import './Article.css'
+
+export class Article extends React.Component {
+  render() {
+    return (
+      <article id={this.props.hash}>
+        <div className="title">{this.props.title}</div>
+        <div className="author">By <strong>{this.props.author}</strong></div>
+        <pre>{this.props.text}</pre>
+      </article>
+    )
+  }
+}
+```
+
+Add a bit of css to the `src/components/Article.css`
+
+```css
+article {
+  background: #fff;
+  white-space: wrap;
+  display: block;
+  padding: 2rem;
+  margin: 2rem;
+  float: left;
+}
+article .title {
+  color: #8989aa;
+  font-weight: bold;
+  font-size: 1rem;
+}
+article .author {
+  font-style: italic;
+  font-size: 0.9rem;
+}
+```
+
+### Update index to include the articles
+
+Add a generation of articles by importing `Article` and creating a list from a simple function
+
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import './App.css'
+
+import { Name } from './components/Name'
+import { Article } from './components/Article'
+
+const createArticles = () => {
+  let articles = []
+  for (let i = 0; i < 10; i++) {
+    articles.push((
+      <Article hash="creating-components-with-props" title="Creating Custom Components" author="Tom" text="We are going to create some custom components..." />
+    ))
+  }
+  return articles
+}
+
+const App = () => (
+  <div id="app" className="center">
+    <header className="header">
+      <h1>Hello <Name name="Foo" />!</h1>
+    </header>
+    <div className="container">
+      {createArticles()}
+    </div>
+  </div>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Run the app

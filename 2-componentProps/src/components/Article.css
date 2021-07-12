@@ -1,0 +1,17 @@
+article {
+  background: #fff;
+  white-space: wrap;
+  display: block;
+  padding: 2rem;
+  margin: 2rem;
+  float: left;
+}
+article .title {
+  color: #8989aa;
+  font-weight: bold;
+  font-size: 1rem;
+}
+article .author {
+  font-style: italic;
+  font-size: 0.9rem;
+}

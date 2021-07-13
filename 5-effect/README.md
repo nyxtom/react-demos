@@ -65,28 +65,6 @@ h1 {
 }
 ```
 
-## Add @babel/runtime and @babel/plugin-transform-runtime to allow async/await to work
-
-```bash
-npm i -D -s @babel/runtime @babel/plugin-transform-runtime
-```
-
-Then add the plugin to webpack.dev.config.js
-
-```javascript
-{
-  test: /\.js$/,
-  exclude: /node_modules/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      presets: ['@babel/preset-env', '@babel/preset-react'],
-      plugins: ['@babel/transform-runtime']
-    },
-  },
-},
-```
-
 ## Import useEffect and create a function to fetch data
 
 ```javascript

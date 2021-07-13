@@ -18,6 +18,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react'],
+            plugins: ['@babel/transform-runtime']
           },
         },
       },
@@ -40,7 +41,6 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: process.env.PORT || 4000,

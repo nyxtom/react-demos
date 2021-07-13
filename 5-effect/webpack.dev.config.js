@@ -41,14 +41,10 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'public'),
     port: process.env.PORT || 4000,
     open: true,
     hot: true,
-    historyApiFallback: {
-      index: 'public/index.html'
-    }
   },
 }

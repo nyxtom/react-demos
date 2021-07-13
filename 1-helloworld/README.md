@@ -274,7 +274,29 @@ Simple hello world react application demonstrating basic client setup from scrat
   }
   ```
 
-  Mostly the only main differences here are the `mode: 'production'` and the use of the `output.filename`
+Mostly the only main differences here are the `mode: 'production'` and the use of the `output.filename`
+
+## Add @babel/runtime and @babel/plugin-transform-runtime to allow async/await to work
+
+```bash
+npm i -D -s @babel/runtime @babel/plugin-transform-runtime
+```
+
+Then add the plugin to webpack.dev.config.js
+
+```javascript
+{
+  test: /\.js$/,
+  exclude: /node_modules/,
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: ['@babel/preset-env', '@babel/preset-react'],
+      plugins: ['@babel/transform-runtime']
+    },
+  },
+},
+```
 
 ### Setup index.js
 

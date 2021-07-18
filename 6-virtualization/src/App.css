@@ -15,7 +15,7 @@ h1 {
  * Header
  */
 .header {
-    padding: 4px;
+    padding: 4px 10px;
     height: 40px;
     border-bottom: solid 1px #d9d9d9;
     box-shadow: 0px 1px 6px -2px #aaa;
@@ -41,7 +41,7 @@ h1 {
   padding: 4px 8px;
   margin: 8px;
   overflow: hidden;
-  height: 120px;
+  height: calc(100% - 16px);
 }
 
 .error {

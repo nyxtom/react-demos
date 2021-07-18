@@ -48,6 +48,7 @@ h1 {
  */
 .header {
     padding: 4px;
+    height: 40px;
     border-bottom: solid 1px #d9d9d9;
     box-shadow: 0px 1px 6px -2px #aaa;
     background: #fff;
@@ -60,7 +61,8 @@ h1 {
  * Container
  */
 .container {
-  padding: 1rem;
+  height: calc(100vh - 50px);
+  overflow: hidden;
 }
 ```
 
@@ -162,11 +164,163 @@ const App = () => {
   border-bottom: solid 1px #d9d9d9;
   padding: 4px 8px;
   margin: 8px;
+  overflow: hidden;
+  height: calc(100% - 16px);
 }
 
 .error {
   background: #ffcccc;
   padding: 4px;
+}
+```
+
+## Add a utility to support resizing state
+
+Whenever the window resizes we need to capture the dimensions so we can handle dimensions that may be needed to calculate a proper virtualized component.
+
+```javascript
+const useResize = () => {
+  const [dimensions, setDimensions] = React.useState([window.innerHeight, window.innerWidth])
+
+  // subscribe to resize events to trigger this state change
+  React.useEffect(() => {
+    const onWindowResize = () => {
+      setDimensions([window.innerHeight, window.innerWidth])
+    };
+    window.addEventListener('resize', onWindowResize)
+
+    return () => window.removeEventListener('resize', onWindowResize)
+  }, [])
+
+  return dimensions
+}
+```
+
+## Add a utility to handle calculating the height of a container
+
+```javascript
+const useAutoHeight = ({ element, dimensions, layout }) => {
+  const { clipToWindow, fixedHeight = containerHeight } = layout
+  const [windowHeight] = dimensions
+  const [containerHeight, setContainerHeight] = React.useState(fixedHeight || 0)
+
+  // subscribe to layout, windowHeight changes, length
+  // to update the parent virtual-container height
+  React.useLayoutEffect(() => {
+    if (fixedHeight) {
+      return
+    }
+
+    let height
+    if (clipToWindow) {
+      height = windowHeight - element.current.offsetTop
+    } else {
+      let rect = element.current.parentElement.getBoundingClientRect()
+      height = rect.height
+    }
+    if (containerHeight !== height) {
+      setContainerHeight(height)
+    }
+  }, [fixedHeight, windowHeight, element, clipToWindow])
+
+  return containerHeight
+}
+```
+
+This will look at the window height and the offset top for the container to calculate the container height, otherwise it will use the parent element's boudnign client rectangle and use that height. This should work fine in scenarios such as `100vh` or even flexbox containers.
+
+## Implement a VirtualList
+
+Now that we have several utilities to handle the container size and the window dimensions, we need a component that will render a container to a fixed height and an inner container to the hypothetical height based on the number of items and the fixed per item height.
+
+```javascript
+const VirtualList = ({ length, layout, render }) => {
+  const element = React.useRef()
+  const dimensions = useResize()
+  const containerHeight = useAutoHeight({
+    element,
+    dimensions,
+    layout
+  })
+
+  const [params, setParams] = React.useState([])
+  const [scrollTop, setScrollTop] = React.useState(0)
+
+  const innerHeight = React.useCallback(() => {
+    return layout.height * length
+  }, [layout, length])()
+
+  // subscribe to container height, length, scrollTop, layout
+  // to update the current start and end index
+  React.useLayoutEffect(() => {
+    const pageSize = Math.floor((2 * containerHeight) / layout.height)
+
+    const startIndex = Math.min(
+      length - 1,
+      Math.max(0, Math.floor(scrollTop / layout.height) - pageSize)
+    )
+    const endIndex = Math.min(
+      length - 1,
+      startIndex + pageSize * 2
+    )
+
+    const itemWidth = layout.width || '100%'
+    const itemHeight = layout.height
+    setParams({
+      startIndex,
+      endIndex,
+      itemHeight,
+      itemWidth
+    })
+  }, [length, layout, scrollTop, containerHeight]);
+
+  // update scroll top whenever this is called
+  const onScroll = React.useCallback((e) => {
+    setScrollTop(e.currentTarget.scrollTop)
+  })
+
+  return (
+    <div className="virtual-container" ref={element} style={{ overflow: 'auto', height: containerHeight }} onScroll={onScroll}>
+      <div style={{ position: 'relative', height: innerHeight }}>
+        {typeof render === 'function' ? render(params) : null}
+      </div>
+    </div>
+  )
+}
+```
+
+## Replace implementation of PostList to use VirtualList
+
+```javascript
+const PostList = ({ posts = [] }) => {
+  const onRender = ({ startIndex, endIndex, itemHeight, itemWidth }) => {
+    if (startIndex !== null && endIndex != null) {
+      return posts.slice(startIndex, endIndex + 1).map((post, i) => (
+        <Post key={post.id} {...post} style={{ 
+          position: 'absolute',
+          top: ((startIndex + i) * itemHeight),
+          height: itemHeight, width: itemWidth  
+        }} />
+      ))
+    }
+  }
+
+  if (posts) {
+    return <VirtualList length={posts.length} layout={{ height: 232 }} render={onRender} />
+  }
+
+  return null
+}
+
+const Post = ({ title, body, id, style }) => {
+  return (
+    <div style={style} className="post-container">
+      <article key={id} className="post">
+        <h3>{id} {title}</h3>
+        <pre>{body}</pre>
+      </article>
+    </div>
+  )
 }
 ```
 

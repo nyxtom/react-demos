@@ -1,0 +1,47 @@
+html, body {
+  margin: 0px;
+  padding: 0px;
+  background: #f9f9f9;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0px;
+  padding: 0.5rem;
+}
+
+/**
+ * Header
+ */
+.header {
+    padding: 4px;
+    border-bottom: solid 1px #d9d9d9;
+    box-shadow: 0px 1px 6px -2px #aaa;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    z-index: 999;
+    position: relative;
+}
+
+/**
+ * Container
+ */
+.container {
+  padding: 1rem;
+}
+
+/**
+ * Image
+ */
+.lazy-image {
+  background: #999;
+  height: 360px;
+  width: 640px;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+.lazy-image.loading {
+  opacity: 0.2;
+}

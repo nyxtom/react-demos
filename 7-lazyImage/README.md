@@ -20,7 +20,6 @@ const App = () => (
       <h1>Hello World!</h1>
     </div>
     <div className="container">
-      <LoginForm />
     </div>
   </div>
 )

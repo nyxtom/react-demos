@@ -1,14 +1,14 @@
 import React from 'react'
 import * as d3 from 'd3'
 
-import { useFetchCache, useResizer } from '../utils'
+import { useFetchCache } from '../utils'
+import { Widget } from './widget'
 
 const sampleUrl = 'https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv'
 
 export const TimeSeries = ({ title = 'Time Series Sample', url = sampleUrl }) => {
   const vizRef = React.useRef()
-  const widgetRef = React.useRef()
-  const dimensions = useResizer(widgetRef)
+  const [dimensions, setDimensions] = React.useState([])
   const { status, data, error } = useFetchCache(url, async () => {
     let response = await d3.csv(url)
     const parseDate = d3.timeParse('%Y-%m-%d')
@@ -35,19 +35,10 @@ export const TimeSeries = ({ title = 'Time Series Sample', url = sampleUrl }) =>
   }, [data, dimensions])
 
   return (
-    <div className="widget" ref={widgetRef}>
-      <h3>{title}</h3>
-      <div className={`widget-content ${status}`}>
-        { status === 'loading' || error ? 
-          <div className="alert">
-            { status === 'loading' ? <span className="loading">Loading...</span> : null }
-            { error ? <span className="error">{error.message}</span> : null }
-          </div> : null
-        }
-        <svg ref={vizRef}>
-          <path fill="none" stroke="steelblue" strokeWidth="1.5" d={lineData.data} />
-        </svg>
-      </div>
-    </div>
+    <Widget title={title} status={status} error={error} onResize={setDimensions}>
+      <svg ref={vizRef}>
+        <path fill="none" stroke="steelblue" strokeWidth="1.5" d={lineData.data} />
+      </svg>
+    </Widget>
   )
 }

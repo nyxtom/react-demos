@@ -41,7 +41,7 @@ export const useFetchCache = (key, callback) => {
   return data
 }
 
-export const useResizer = (element) => {
+export const useResizer = (element, onResize) => {
   const [dimensions, setDimensions] = React.useState([])
 
   React.useLayoutEffect(() => {
@@ -50,6 +50,9 @@ export const useResizer = (element) => {
       let entry = entries[0]
       if (entry && !didCancel) {
         const { width, height } = entry.contentRect
+        if (typeof onResize === 'function') {
+          onResize([width, height])
+        }
         setDimensions([width, height])
       }
     })
@@ -59,7 +62,6 @@ export const useResizer = (element) => {
       resizer.unobserve(element.current)
       didCancel = true
     }
-
   }, [element])
   
   return dimensions

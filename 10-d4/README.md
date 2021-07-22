@@ -239,8 +239,6 @@ export const TimeSeries = ({ url = sampleUrl }) => {
 
 Great! We render out the path data directly and let d3 generate the line path after the layout has run. This will ensure that whenever the data changes we re-run the effect to grab the latest version of the path data. Along with the path data we are passing along the x and y functions in case we want to use it for hover functions. Unfortunately, this does nothing when the container actually resizes, so let's create a simple hook that will handle that.
 
-### ResizeObserver hook
-
 Whenever the container resizes, we want to track that in order to update our path generator function. We can do that by creating a custom hook that will use a ResizeObserver.
 
 ```javascript
@@ -466,8 +464,6 @@ export const TimeSeries = ({ title = 'Time Series Sample', url = sampleUrl }) =>
 
 Great! That takes are of that. Now it will run with the resize observer, and handles all the status, error...etc state inside the widget container.
 
-## Run the app
-
 ```bash
 npm start
 ```
@@ -478,4 +474,108 @@ Now that we have a time series, lets go ahead and move along to the next visuali
 
 ```javascript
 // src/components/bar-chart.js
+import React from 'react'
+import * as d3 from 'd3'
+
+import { useFetchCache } from '../utils'
+import { Widget } from './widget'
+
+const sampleUrl = 'https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv'
+
+export const BarChart = ({ title = 'Bar Chart Sample', url = sampleUrl }) => {
+  const vizRef = React.useRef()
+  const [dimensions, setDimensions] = React.useState([])
+  const { status, data, error } = useFetchCache(url, async () => {
+    let response = await d3.csv(url)
+    const parseDate = d3.timeParse('%Y-%m-%d')
+    return response.map(d => {
+      return { date: parseDate(d.date), value: d.value }
+    })
+  })
+
+  const [bars, setBars] = React.useState([])
+
+  React.useLayoutEffect(() => {
+    if (!data) return
+    const rect = vizRef.current.getBoundingClientRect()
+
+    const rollup = d3
+      .rollups(
+        data,
+        v => {
+          return {
+            min: d3.min(v, d => +d.value),
+            max: d3.max(v, d => +d.value),
+            avg: d3.mean(v, d => +d.value)
+          }
+        },
+        d => d.date.getDate()
+      )
+      .map(entry => {
+        return { key: entry[0], value: entry[1] }
+      })
+
+    const x = d3.scaleTime()
+      .domain(d3.extent(rollup, (d) => d.key))
+      .range([0, rect.width])
+
+    const maxY = d3.scaleLinear()
+      .domain([0, d3.max(rollup, (d) => +d.value.max)])
+      .range([rect.height, 0])
+
+    const barData = rollup.map(d => {
+      return { 
+        x: x(d.key),
+        width: (rect.width / rollup.length),
+        y: maxY(d.value.max),
+        height: rect.height - maxY(d.value.max)
+      };
+    })
+    setBars(barData)
+  }, [data, dimensions])
+
+  return (
+    <Widget title={title} status={status} error={error} onResize={setDimensions}>
+      <svg ref={vizRef}>
+        <g className="bars">
+          {bars.map(bar => <rect {...bar} fill="steelblue" />)}
+        </g>
+      </svg>
+    </Widget>
+  )
+}
+```
+
+This takes advantage of `d3.rollup` to pass a `reducer` function with the first grouping being the first key `d.date.getDate()` - grouping the data by date in a month. We use this rollup data to generate an x and y scale/domain/range function before we create the bar data.
+
+Import the `<BarChart>` into the app and we will see it rendered.
+
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import { TimeSeries } from './components/time-series'
+import { BarChart } from './components/bar-chart'
+
+import './App.css'
+
+const App = () => (
+  <div id="app" className="center">
+    <div className="header">
+      <h1>Hello World!</h1>
+    </div>
+    <div className="container">
+      <TimeSeries />
+      <BarChart />
+    </div>
+  </div>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+Great! Now it will display both the time series and the bar chart now.
+
+```bash
+npm start
 ```

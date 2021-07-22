@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { TimeSeries } from './components/time-series'
+import { BarChart } from './components/bar-chart'
 
 import './App.css'
 
@@ -12,6 +13,7 @@ const App = () => (
     </div>
     <div className="container">
       <TimeSeries />
+      <BarChart />
     </div>
   </div>
 )

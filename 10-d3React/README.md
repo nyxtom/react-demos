@@ -579,3 +579,90 @@ Great! Now it will display both the time series and the bar chart now.
 ```bash
 npm start
 ```
+
+## Scatter Plot
+
+The scatter plot widget will be mostly the same as the other two implementations. We just need to generate some point data, and render as circles. We'll take advantage of the same `useFetchCache` but instead of an actual fetch request we will return the generated random points.
+
+```javascript
+// src/components/scatter-plot.js
+import React from 'react'
+import * as d3 from 'd3'
+
+import { useFetchCache } from '../utils'
+import { Widget } from './widget'
+
+export const ScatterPlot = ({ title = 'Scatter Plot' }) => {
+  const vizRef = React.useRef()
+  const [dimensions, setDimensions] = React.useState([])
+  const { status, data, error } = useFetchCache('random', async () => {
+    let points = []
+    for (let i = 0; i < 100; i++) {
+      points.push({
+        x: i * 1000,
+        y: i * Math.log(Math.random() * 20) * 2000
+      })
+    }
+    return points
+  })
+
+  const [points, setPoints] = React.useState([])
+
+  React.useLayoutEffect(() => {
+    if (!data) return
+    const rect = vizRef.current.getBoundingClientRect()
+    const x = d3.scaleLinear()
+      .domain(d3.extent(data, (d) => d.x))
+      .range([0, rect.width])
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(data, (d) => d.y)])
+      .range([rect.height, 0])
+    const points = data.map(d => {
+      return { x: x(d.x), y: y(d.y) }
+    })
+    setPoints(points)
+  }, [data, dimensions])
+
+  return (
+    <Widget title={title} status={status} error={error} onResize={setDimensions}>
+      <svg ref={vizRef}>
+        {points.map(p => <circle fill="steelblue" cx={p.x} cy={p.y} r={3} />)}
+      </svg>
+    </Widget>
+  )
+}
+```
+
+Import the scatter plot into the `index.js` and call it good!
+
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import { TimeSeries } from './components/time-series'
+import { BarChart } from './components/bar-chart'
+import { ScatterPlot } from './components/scatter-plot'
+
+import './App.css'
+
+const App = () => (
+  <div id="app" className="center">
+    <div className="header">
+      <h1>D3</h1>
+    </div>
+    <div className="container">
+      <TimeSeries />
+      <BarChart />
+      <ScatterPlot />
+    </div>
+  </div>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+Now we will see all three graphs.
+
+```bash
+npm start
+```

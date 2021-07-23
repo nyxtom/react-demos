@@ -1,6 +1,6 @@
-# d3
+# context
 
-Basic implemenation of react app using d3 visualizations
+Basic implemenation of react app using d3 visualizations and useContext
 
 ## Project Setup Based on 1-helloworld
 

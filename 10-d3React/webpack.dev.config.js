@@ -33,6 +33,9 @@ module.exports = {
     ],
   },
   resolve: {
+    roots: [
+      path.resolve('./src')
+    ],
     extensions: ['.js', '.jsx'],
   },
   plugins: [

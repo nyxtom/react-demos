@@ -1,7 +1,7 @@
 import React from 'react'
 import * as d3 from 'd3'
 
-import { useFetchCache } from '../utils'
+import { useFetchCache } from '/utils'
 import { Widget } from './widget'
 
 const sampleUrl = 'https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv'

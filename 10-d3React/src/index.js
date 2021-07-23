@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { TimeSeries } from './components/time-series'
-import { BarChart } from './components/bar-chart'
-import { ScatterPlot } from './components/scatter-plot'
+import { TimeSeries } from '/components/time-series'
+import { BarChart } from '/components/bar-chart'
+import { ScatterPlot } from '/components/scatter-plot'
 
 import './App.css'
 

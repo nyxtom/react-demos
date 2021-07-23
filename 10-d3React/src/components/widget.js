@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useResizer } from '../utils'
+import { useResizer } from '/utils'
 
 export const Widget = ({ title, status, error, children, onResize }) => {
   const widgetRef = React.useRef()

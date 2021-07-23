@@ -1,7 +1,7 @@
 import React from 'react'
 import * as d3 from 'd3'
 
-import { useFetchCache } from '../utils'
+import { useFetchCache } from '/utils'
 import { Widget } from './widget'
 
 export const ScatterPlot = ({ title = 'Scatter Plot' }) => {

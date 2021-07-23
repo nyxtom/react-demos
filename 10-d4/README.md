@@ -33,14 +33,16 @@ Setup a bit of css
 html, body {
   margin: 0px;
   padding: 0px;
-  background: #f9f9f9;
+  background: #fcfcfc;
   font-size: 12px;
 }
 
 h1 {
-  font-size: 2rem;
-  margin: 0px;
+  font-size: 1.3rem;
+  margin: 0px 1rem;
   padding: 0.5rem;
+  font-weight: normal;
+  color: #333;
 }
 
 /**
@@ -48,8 +50,8 @@ h1 {
  */
 .header {
     padding: 4px;
-    border-bottom: solid 1px #d9d9d9;
-    box-shadow: 0px 1px 6px -2px #aaa;
+    border-bottom: solid 1px #e9e9e9;
+    box-shadow: 0px 1px 6px -3px #ccc;
     background: #fff;
     display: flex;
     z-index: 999;
@@ -60,7 +62,7 @@ h1 {
  * Container
  */
 .container {
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   flex-wrap: wrap;
 }
@@ -69,24 +71,22 @@ h1 {
  * Widget
  */
 .widget {
-  width: 500px;
-  height: 300px;
-  margin: 1rem;
+  width: 450px;
+  height: 250px;
+  margin: 0.25rem;
   background: #fff;
-  box-shadow: 0px 1px 4px -2px #ddd;
-  border: solid 1px #eee;
+  border: solid 1px #f1f1f1;
   transition: all 0.15s ease-in-out;
   display: flex;
   flex-direction: column;
 }
-.widget:hover {
-  box-shadow: 0px 1px 4px -2px #444;
-}
 .widget h3 {
   margin: 0px;
-  padding: 1rem;
+  padding: 1rem 0.5rem 1.5rem;
   z-index: 1;
-  border-bottom: solid 1px #eee;
+  color: #999;
+  font-weight: normal;
+  font-size: 1rem;
 }
 .widget-content {
   display: flex;

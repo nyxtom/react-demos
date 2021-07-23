@@ -9,7 +9,7 @@ import './App.css'
 const App = () => (
   <div id="app" className="center">
     <div className="header">
-      <h1>Hello World!</h1>
+      <h1>D3</h1>
     </div>
     <div className="container">
       <TimeSeries />

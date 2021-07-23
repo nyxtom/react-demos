@@ -12,7 +12,8 @@ export const ScatterPlot = ({ title = 'Scatter Plot' }) => {
     for (let i = 0; i < 100; i++) {
       points.push({
         x: i * 1000,
-        y: i * Math.log(Math.random() * 20) * 2000
+        y: i * Math.log(Math.random() * 20) * 2000,
+        r: Math.log2(i) * Math.random()
       })
     }
     return points
@@ -30,7 +31,7 @@ export const ScatterPlot = ({ title = 'Scatter Plot' }) => {
       .domain([0, d3.max(data, (d) => d.y)])
       .range([rect.height, 0])
     const points = data.map(d => {
-      return { x: x(d.x), y: y(d.y) }
+      return { x: x(d.x), y: y(d.y), r: d.r }
     })
     setPoints(points)
   }, [data, dimensions])
@@ -38,7 +39,7 @@ export const ScatterPlot = ({ title = 'Scatter Plot' }) => {
   return (
     <Widget title={title} status={status} error={error} onResize={setDimensions}>
       <svg ref={vizRef}>
-        {points.map(p => <circle fill="steelblue" cx={p.x} cy={p.y} r={3} />)}
+        {points.map(p => <circle fill="steelblue" cx={p.x} cy={p.y} r={p.r} />)}
       </svg>
     </Widget>
   )

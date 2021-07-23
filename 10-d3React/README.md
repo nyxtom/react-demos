@@ -1,6 +1,6 @@
 # d3
 
-Basic implemenation of react app using dozens of d3 visualizations without d3 directly manipulating the DOM
+Basic implementation of react app using dozens of d3 visualizations without d3 directly manipulating the DOM
 
 ## Project Setup Based on 1-helloworld
 

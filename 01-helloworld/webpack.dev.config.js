@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|jpg|jpeg|ico)$/i,
@@ -47,4 +47,5 @@ module.exports = {
     open: true,
     hot: true,
   },
+  devtool: 'inline-source-map'
 }

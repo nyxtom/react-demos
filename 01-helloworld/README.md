@@ -38,10 +38,10 @@ Simple hello world react application demonstrating basic client setup from scrat
   @babel/eslint-parser: Parser for eslint based on babel
   babel-loader: A plugin that enables Webpack to work with Babel and its presets
 
-- Setup dev dependencies for CSS and HTML
+- Setup dev dependencies for CSS and HTML (style parsing and autoprefixing)
 
   ```bash
-  npm i -D -s style-loader css-loader html-webpack-plugin
+  npm i -D -s style-loader css-loader postcss-loader html-webpack-plugin
   ```
 
 - Setup prettier for code formatting
@@ -198,7 +198,7 @@ Simple hello world react application demonstrating basic client setup from scrat
         },
         {
           test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+          use: ['style-loader', 'css-loader', 'postcss-loader'],
         },
         {
           test: /\.(png|jpg|jpeg|ico)$/i,
@@ -221,6 +221,7 @@ Simple hello world react application demonstrating basic client setup from scrat
       open: true,
       hot: true,
     },
+    devtool: 'inline-source-map'
   }
   ```
 

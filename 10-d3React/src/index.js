@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { TimeSeries } from '/components/time-series'
 import { BarChart } from '/components/bar-chart'
 import { ScatterPlot } from '/components/scatter-plot'
+import { AreaChart } from '/components/area-chart'
 
 import './App.css'
 
@@ -16,6 +17,7 @@ const App = () => (
       <TimeSeries />
       <BarChart />
       <ScatterPlot />
+      <AreaChart />
     </div>
   </div>
 )

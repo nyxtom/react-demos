@@ -18,7 +18,7 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: ['@babel/transform-runtime']
+            plugins: ['@babel/transform-runtime'],
           },
         },
       },
@@ -47,5 +47,5 @@ module.exports = {
     open: true,
     hot: true,
   },
-  devtool: 'inline-source-map'
+  devtool: 'inline-source-map',
 }

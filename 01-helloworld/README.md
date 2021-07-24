@@ -58,6 +58,12 @@ Simple hello world react application demonstrating basic client setup from scrat
 
   ESLint plugins to support airbnb standard JavaScript, prettier, imports, jsx-a11y, react, react-hooks
 
+- Setup husky and lint-staged
+
+  ```bash
+  npm i -D -s husky lint-staged
+  ```
+
 ### Create Root Folder Structure
 
 - `public/` for HTML file and assets (images, fonts..etc)
@@ -156,6 +162,24 @@ Simple hello world react application demonstrating basic client setup from scrat
   {
     "scripts": {
       "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\""
+    }
+  }
+  ```
+
+### Husky/Lint-Staged Git Commit Hooks
+
+- To setup git commit hooks we can use husky to use githooks as if they are npm scripts and we use lint-staged to run scripts on staged files in git. Add the following precommit to scripts.
+
+  ```json
+  {
+    "scripts": {
+      "precommit": "lint-staged"
+    },
+    "lint-staged": {
+      "src/**/*.{js,jsx,json,css,md}": [
+        "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
+        "git add"
+      ]
     }
   }
   ```

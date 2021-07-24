@@ -8,7 +8,14 @@
     "build": "webpack --config webpack.prod.config.js",
     "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css,md}": [
+      "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
+      "git add"
+    ]
   },
   "keywords": [],
   "author": "",

@@ -17,7 +17,7 @@ app.use(cookieParser())
 app.use(express.static(`${dirname}/client/dist`))
 
 const SECRET_KEY = 'wittVGdQx1wCH39Ds8TywkuIX5hJrYJ5'
-const MAX_AGE = 24 * 60 * 60
+const MAX_AGE = 24 * 60 * 60 * 1000
 
 app.post('/auth/signin', (req, res) => {
   const { username, password } = req.body
@@ -26,7 +26,7 @@ app.post('/auth/signin', (req, res) => {
   }
 
   const token = jwt.sign({ user: username }, SECRET_KEY)
-  res.cookie('authcookie', token, { maxAge: MAX_AGE, httpOnly: true })
+  res.cookie('__session', token, { maxAge: MAX_AGE, httpOnly: true })
   res.json({ user: username })
 })
 

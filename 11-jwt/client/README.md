@@ -183,7 +183,7 @@ const Routes = () => {
     )
   }
 
-  return (<h1>Hello {auth.user.username}</h1>)
+  return (<h1 className="center">Hello {auth.user.username}</h1>)
 }
 
 const App = () => {
@@ -199,8 +199,62 @@ const App = () => {
 
 If you're using the `react-router-dom`, you can make use of the `window.location` and the `history` api to determine which page we should be routing too. Typically in any protected application, we may make use of rbac rules and the current authenticated context to route users to the right place. In this simple implementation we aren't doing any real authentication but we are setting state accordingly.
 
-### Run the app
+## Update the auth provider
 
-```bash
-npm start
+Currently the auth provider doesn't know that it might already be logged in. To do this, we need to setup an initial request to check against our authenticated state.
+
+```javascript
+export const useProfile = () => {
+  const [data, setData] = React.useState({})
+  const [err, setError] = React.useState(null)
+  const [loading, setLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    let didCancel = false
+    
+    setLoading(true)
+    async function fetchData() {
+      try {
+        let res = await fetch('/me')
+        let json = await res.json()
+        if (!didCancel) {
+          setLoading(false)
+          setData(json)
+        }
+      } catch (err) {
+        if (!didCancel) {
+          setError(err.message)
+        }
+      }
+    }
+
+    fetchData()
+
+    return () => didCancel = true
+  }, [])
+
+  return [data, err, loading]
+}
 ```
+
+Then in the `AuthProvider` we can use this to dispatch an authenticated state.
+
+```javascript
+export const AuthProvider = ({children}) => {
+  const [auth, dispatch] = React.useReducer(authReducer, { isAuthenticated: false })
+  const [profile, err, loading] = useProfile()
+  
+  if (profile?.user && !auth.isAuthenticated) {
+    dispatch({ type: 'auth.signin', user: { username: profile.user }})
+  }
+
+  return (
+    <AuthContext.Provider value={[auth, dispatch, loading, err]}>
+      { !loading ? children : null }
+    </AuthContext.Provider>
+  )
+}
+export const useAuth = () => React.useContext(AuthContext)
+```
+
+Great! Assuming you have setup the server implementation in `../server` this will run and check against authentication. JWT is handled through the cookie mechanism so we don't have to worry about parsing any tokens or anything and just let the browser and local state do its thing.

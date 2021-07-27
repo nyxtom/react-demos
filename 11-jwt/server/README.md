@@ -73,6 +73,7 @@ app.post('/auth/signin', (req, res) => {
 
   const token = jwt.sign({ user: username }, SECRET_KEY)
   res.cookie('authcookie', token, { maxAge: MAX_AGE, httpOnly: true })
+  res.json({ user: username })
 })
 
 app.post('/auth/signout', (req, res) => {

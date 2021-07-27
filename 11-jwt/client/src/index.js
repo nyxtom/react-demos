@@ -15,7 +15,7 @@ const Routes = () => {
     )
   }
 
-  return (<h1>Hello {auth.user.username}</h1>)
+  return (<h1>Hello, {auth.user.username}</h1>)
 }
 
 const App = () => {

@@ -9,6 +9,25 @@ export const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    fetch('/auth/signin', 
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          setAuth({ type: 'auth.signin', user: { username }})
+        }
+      }, err => {
+        console.error(err)
+      })
     setAuth({ type: 'auth.signin', user: { username }})
     return false
   }

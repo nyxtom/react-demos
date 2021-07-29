@@ -151,10 +151,12 @@ app.get('/posts', (req, res) => {
 
 app.get('/', (req, res) => {
   const cache = {}
-  cache['/posts'] = [
-    { id: '1', title: 'default data hello', body: 'Lorem ipsum 999' },
-    { id: '2', title: 'default world 2', body: 'Lorem ipsum x' }
-  ]
+  if (!req.query.refresh || req.query.refresh === 'false') {
+    cache['/posts'] = [
+      { id: '1', title: 'default data hello', body: 'Lorem ipsum 999' },
+      { id: '2', title: 'default world 2', body: 'Lorem ipsum x' }
+    ]
+  }
   const root = ReactDOMServer.renderToString(<App cache={cache} />)
   fs.readFile(CLIENT_INDEX, 'utf8', (err, data) => {
     if (err) {
@@ -173,5 +175,5 @@ These server routes will respond to get requests on `/posts` and in the case of 
 ## Run the app
 
 ```bash
-node dist/main.js
+npm start
 ```

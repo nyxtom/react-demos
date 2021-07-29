@@ -26,10 +26,12 @@ app.get('/posts', (req, res) => {
 
 app.get('/', (req, res) => {
   const cache = {}
-  cache['/posts'] = [
-    { id: '1', title: 'default data hello', body: 'Lorem ipsum 999' },
-    { id: '2', title: 'default world 2', body: 'Lorem ipsum x' }
-  ]
+  if (!req.query.refresh || req.query.refresh === 'false') {
+    cache['/posts'] = [
+      { id: '1', title: 'default data hello', body: 'Lorem ipsum 999' },
+      { id: '2', title: 'default world 2', body: 'Lorem ipsum x' }
+    ]
+  }
   const root = ReactDOMServer.renderToString(<App cache={cache} />)
   fs.readFile(CLIENT_INDEX, 'utf8', (err, data) => {
     if (err) {

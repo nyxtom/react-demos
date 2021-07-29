@@ -13,25 +13,36 @@ const dirname = path.resolve(
   )
 );
 
-const CLIENT_DIST = path.resolve(`${dirname}/client/dist`)
-const CLIENT_INDEX = path.resolve(`${dirname}/client/dist/index.html`)
+const CLIENT_INDEX = `${dirname}/client/dist/index.html`
 
 const app = express()
-app.use(express.static(CLIENT_DIST))
 
-app.use('/', (req, res) => {
-  const root = ReactDOMServer.renderToString(<App />)
+app.get('/posts', (req, res) => {
+  res.json([
+    { id: '1', title: 'Hello world', body: 'Lorem ipsum' },
+    { id: '2', title: 'Hello world 2', body: 'Lorem ipsum 2' }
+  ])
+})
+
+app.get('/', (req, res) => {
+  const cache = {}
+  cache['/posts'] = [
+    { id: '1', title: 'default data hello', body: 'Lorem ipsum 999' },
+    { id: '2', title: 'default world 2', body: 'Lorem ipsum x' }
+  ]
+  const root = ReactDOMServer.renderToString(<App cache={cache} />)
   fs.readFile(CLIENT_INDEX, 'utf8', (err, data) => {
     if (err) {
       console.error(err)
       return res.status(500).send(`Something went wrong...`)
     }
 
-    return res.send(
-      data.replace(`<div id="root"></div>`, `<div id="root">${root}</div>`)
-    )
+    let template = data.replace(`<div id="root"></div>`, `<div id="root">${root}</div><script type="text/javascript">window.__INITIAL_STATE = ${JSON.stringify(cache)};</script>`)
+    return res.send(template)
   })
 })
+
+app.use(express.static(`${dirname}/client/dist`))
 
 app.listen(process.env.PORT || 9000, (err) => {
   console.log(err || `Started server on ${process.env.PORT || 9000}`)

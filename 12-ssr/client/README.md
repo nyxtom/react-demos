@@ -75,9 +75,7 @@ Since we will also want support for data fetching, let's implement a simple util
 ```javascript
 const FetchContext = React.createContext({})
 const FetchCache = ({ children, data = new Map() }) => (
-  <FetchContext.Provider value={data}>
-    {children}
-  </FetchContext.Provider>
+  <FetchContext.Provider value={data}>{children}</FetchContext.Provider>
 )
 const useFetchCache = () => React.useContext(FetchContext)
 
@@ -109,7 +107,7 @@ const useFetch = (url) => {
       }
     }
     fetchData()
-    return () => didCancel = true
+    return () => (didCancel = true)
   }, [url, cache])
 
   return [data, err, load]
@@ -128,16 +126,16 @@ const DataList = () => {
 
   return (
     <>
-    { err ? <div className="error">{err.message}</div> : null }
-    { load ? <div className="message">Loading...</div> : null }
-    <ul>
-      {data.map(d => (
-        <li key={d.id}>
-          <h3>{d.title}</h3>
-          <pre>{d.body}</pre>
-        </li>
-      ))}
-    </ul>
+      {err ? <div className="error">{err.message}</div> : null}
+      {load ? <div className="message">Loading...</div> : null}
+      <ul>
+        {data.map((d) => (
+          <li key={d.id}>
+            <h3>{d.title}</h3>
+            <pre>{d.body}</pre>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }
@@ -159,7 +157,7 @@ const App = ({ cache }) => {
 }
 ```
 
-## Update index to load window.__INITIAL_STATE
+## Update index to load window.\_\_INITIAL_STATE
 
 Server side rendering will render the initial HTML, but the react bundled `main.js` is still going to attempt to hydrate with `<App />`. We need to update this to look at the `window.__INITIAL_STATE` to generate the correct diff so when react loads and runs render it will produce the same output (and ultimately skip fetching `/posts`).
 
@@ -169,7 +167,10 @@ import ReactDOM from 'react-dom'
 
 import App from './App'
 
-ReactDOM.hydrate(<App cache={window.__INITIAL_STATE} />, document.getElementById('root'))
+ReactDOM.hydrate(
+  <App cache={window.__INITIAL_STATE} />,
+  document.getElementById('root')
+)
 ```
 
 That's it! Assuming you followed the rest of the `server/README.md` then we will now see different `/posts` results based on whether it is rendered client side or server side.

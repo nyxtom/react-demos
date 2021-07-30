@@ -164,7 +164,7 @@ app.get('/', (req, res) => {
       return res.status(500).send(`Something went wrong...`)
     }
 
-    let template = data.replace(`<div id="root"></div>`, `<div id="root">${root}</div><script type="text/javascript">window.__INITIAL_STATE = ${JSON.stringify(cache)};</script>`)
+    let template = data.replace(/<div id=\"root\">\s*<\/div>/, `<div id="root">${root}</div><script type="text/javascript">window.__INITIAL_STATE = ${JSON.stringify(cache)};</script>`)
     return res.send(template)
   })
 })

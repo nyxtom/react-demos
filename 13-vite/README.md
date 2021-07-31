@@ -19,7 +19,7 @@ Simple react application setup using vite + eslint + prettier + react without ba
 - Install dev dependencies for vite
 
   ```bash
-  npm i --save-dev vite @vitejs/plugin-react-refresh
+  npm i --save-dev vite @vitejs/plugin-react-refresh @rollup/plugin-eslint
   ```
 
 - Install dev dependencies for eslint
@@ -119,15 +119,23 @@ Vite is intended to target modern browsers with native ES modules support. This 
 // vite.config.js
 import { defineConfig } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
+import eslint from '@rollup/plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [reactRefresh()],
-  esbuild: {
-    include: /\.jsx?$/,
-    exclude: [],
-    loader: 'jsx',
-  },
+  plugins: [
+    {
+      ...eslint({
+        include: ['**/**.jsx', '**/**.js'],
+        exclude: ['node_modules/**', 'dist/**'],
+        configFile: '.eslintrc.json',
+        throwOnError: true,
+        throwOnWarning: true,
+      }),
+      enforce: 'pre',
+    },
+    reactRefresh(),
+  ],
 })
 ```
 
@@ -156,7 +164,7 @@ In vite, `index.html` is considered part of the source and module graph. Vite us
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="./index.js"></script>
+    <script type="module" src="./index.jsx"></script>
   </body>
 </html>
 ```
@@ -166,6 +174,7 @@ In vite, `index.html` is considered part of the source and module graph. Vite us
 Now we can setup the simple hello world in React
 
 ```javascript
+// index.jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 

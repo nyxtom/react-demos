@@ -186,3 +186,34 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+## Run the app
+
+Great! Now eslint will run whenever we build or run the app. To run it, use
+
+```bash
+npm start
+```
+
+## Note on \*.jsx
+
+In vite, it's important to note that part of what makes it a fast build system is that it doesn't have to run a full AST parser for javascript files. This is why any javascript with jsx will need to be inside \*.jsx files. As such, the `eslint` commands in the scripts will differ from the other samples. This means including the `--ext .jsx` flag when executing eslint.
+
+```json
+{
+  "scripts": {
+    "build": "vite build",
+    "start": "vite",
+    "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
+    "lint": "eslint . --ext .js,.jsx",
+    "lint:fix": "eslint --fix . --ext .js,.jsx",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css,md}": [
+      "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
+      "git add"
+    ]
+  }
+}
+```

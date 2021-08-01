@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0px;
   padding: 0px;
   font-size: 12px;
@@ -24,7 +25,8 @@ header {
   z-index: 1;
   box-shadow: 2px 2px 3px -1px #ccc;
 }
-.sidebar, .content {
+.sidebar,
+.content {
   display: flex;
   height: calc(100vh - 20px);
   padding: 12px;

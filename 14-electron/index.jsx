@@ -9,12 +9,8 @@ const App = () => (
       <h1>Hello world</h1>
     </header>
     <div className="container">
-      <section className="sidebar">
-        Sidebar
-      </section>
-      <section className="content">
-        Messages
-      </section>
+      <section className="sidebar">Sidebar</section>
+      <section className="content">Messages</section>
     </div>
   </div>
 )

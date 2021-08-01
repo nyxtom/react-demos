@@ -51,12 +51,8 @@ const App = () => (
       <h1>Hello world</h1>
     </header>
     <div className="container">
-      <section className="sidebar">
-        Sidebar
-      </section>
-      <section className="content">
-        Messages
-      </section>
+      <section className="sidebar">Sidebar</section>
+      <section className="content">Messages</section>
     </div>
   </div>
 )
@@ -69,7 +65,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 Add a bit of css to create the layout in `index.css`
 
 ```css
-html, body {
+html,
+body {
   margin: 0px;
   padding: 0px;
   font-size: 12px;
@@ -95,7 +92,8 @@ header {
   z-index: 1;
   box-shadow: 2px 2px 3px -1px #ccc;
 }
-.sidebar, .content {
+.sidebar,
+.content {
   display: flex;
   height: calc(100vh - 20px);
   padding: 12px;
@@ -142,11 +140,11 @@ const { app, BrowserWindow } = require('electron')
 
 function createWindow() {
   const win = new BrowserWindow({
-      width: 800,
-      height: 600,
-      webPreferences: {
-          nodeIntegration: true
-      }
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    },
   })
 
   win.loadFile('dist/index.html')

@@ -1,0 +1,44 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 14px;
+}
+#app {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+}
+
+.editor, .result, iframe {
+  display: flex;
+  width: 50%;
+  height: 100vh;
+}
+
+.editor textarea {
+  border: none;
+  height: calc(100vh - 2rem);
+  width: 100%;
+  margin: 0;
+  padding: 1rem;
+}
+.result iframe {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  border: none;
+}
+.CodeMirror {
+  font-family: 'source-code-pro', Menlo, 'Courier New', Consolas, monospace;
+  color: black;
+  direction: ltr;
+  font-size: 14px;
+  z-index: 0;
+  height: auto;
+  background: transparent;
+  width: 100%;
+  border-right: solid 1px #333;
+}
